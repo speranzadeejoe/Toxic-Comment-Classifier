@@ -12,7 +12,7 @@ This project is a simple web app that checks if a comment is **toxic** or **non-
 * **Model**: Logistic Regression with TF-IDF
 
 ---
-Sample output
+# **Sample Output**
 <img width="1919" height="1005" alt="image" src="https://github.com/user-attachments/assets/b4a67655-0482-450f-b523-d1e0a610c8f5" />
 
 
