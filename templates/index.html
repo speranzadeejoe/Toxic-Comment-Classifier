@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Toxic Comment Classifier</title>
+    <style>
+        body {
+            background: #000000;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.4em;
+            color: #000000;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            font-size: 1em;
+            padding: 15px;
+            border: 1px solid #000000;
+            border-radius: 5px;
+            background-color: #ffffff;
+            color: #000000;
+            resize: none;
+            margin-bottom: 20px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border: 2px solid #000000;
+        }
+
+        button {
+            width: 100%;
+            background: #000000;
+            color: #ffffff;
+            font-size: 1em;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #333333;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1em;
+            font-weight: 500;
+            color: #000000;
+            text-align: center;
+        }
+
+        .positive {
+            color: #008000; /* Dark green */
+        }
+
+        .negative {
+            color: #b22222; /* Dark red */
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Toxic Comment Classifier</h1>
+    <textarea id="commentInput" placeholder="Type your comment here..."></textarea>
+    <button onclick="checkComment()">Check</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    function checkComment() {
+        const comment = document.getElementById('commentInput').value.trim();
+        const resultDiv = document.getElementById('result');
+
+        if (!comment) {
+            resultDiv.className = "negative";
+            resultDiv.innerText = "Please enter a comment.";
+            return;
+        }
+
+        resultDiv.className = "";
+        resultDiv.innerText = "Analyzing...";
+
+        fetch('http://127.0.0.1:5000/predict', {  // Update this as needed
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "comment": comment })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.prediction === "Toxic") {
+                resultDiv.className = "negative";
+                resultDiv.innerText = "Toxic Comment Detected.";
+            } else {
+                resultDiv.className = "positive";
+                resultDiv.innerText = "Comment is Safe.";
+            }
+        })
+        .catch(() => {
+            resultDiv.className = "negative";
+            resultDiv.innerText = "Error connecting to the server.";
+        });
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
